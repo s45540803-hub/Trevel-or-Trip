@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>숙소 소개</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        /* ===== 숙소 선택 버튼 ===== */
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        button {
+            padding: 14px 22px;
+            font-size: 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background-color: #333;
+            color: #fff;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        /* ===== 숙소 영역 ===== */
+        .stay {
+            display: none;
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: left;
+
+            /* 애니메이션용 */
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .stay.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== 숙소 내부 탭 버튼 ===== */
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .tab-buttons button {
+            background: #eee;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .tab-buttons button.active {
+            background: #333;
+            color: #fff;
+        }
+
+        /* ===== 탭 내용 ===== */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>🏨 숙소 선택</h1>
+
+    <!-- ===== 숙소 선택 버튼 ===== -->
+    <div class="button-group">
+        <button onclick="showStay(1)">숙소 1</button>
+        <button onclick="showStay(2)">숙소 2</button>
+        <button onclick="showStay(3)">숙소 3</button>
+    </div>
+
+    <!-- ================= 숙소 1 ================= -->
+    <div id="stay1" class="stay">
+
+        <!-- ✏️ 숙소 이름 -->
+        <h2>🌿 숙소 1 이름</h2>
+
+        <!-- ===== 추가 선택 버튼 (탭) ===== -->
+        <div class="tab-buttons">
+            <button onclick="showTab(1, 1)" class="active">소개</button>
+            <button onclick="showTab(1, 2)">시설</button>
+            <button onclick="showTab(1, 3)">이용안내</button>
+        </div>
+
+        <!-- ✏️ 소개 -->
+        <div id="stay1-tab1" class="tab-content active">
+            <p>숙소 1에 대한 전체적인 소개를 여기에 작성하세요.</p>
+        </div>
+
+        <!-- ✏️ 시설 -->
+        <div id="stay1-tab2" class="tab-content">
+            <ul>
+                <li>침대 / 와이파이</li>
+                <li>주방 / 조리도구</li>
+            </ul>
+        </div>
+
+        <!-- ✏️ 이용안내 -->
+        <div id="stay1-tab3" class="tab-content">
+            <p>체크인 15:00 / 체크아웃 11:00</p>
+        </div>
+    </div>
+
+    <!-- ================= 숙소 2 ================= -->
+    <div id="stay2" class="stay">
+        <h2>🏡 숙소 2 이름</h2>
+
+        <div class="tab-buttons">
+            <button onclick="showTab(2, 1)" class="active">소개</button>
+            <button onclick="showTab(2, 2)">시설</button>
+            <button onclick="showTab(2, 3)">이용안내</button>
+        </div>
+
+        <div id="stay2-tab1" class="tab-content active">
+            <p>숙소 2 소개 문구</p>
+        </div>
+
+        <div id="stay2-tab2" class="tab-content">
+            <p>시설 정보</p>
+        </div>
+
+        <div id="stay2-tab3" class="tab-content">
+            <p>이용 시 주의사항</p>
+        </div>
+    </div>
+
+    <!-- ================= 숙소 3 ================= -->
+    <div id="stay3" class="stay">
+        <h2>✨ 숙소 3 이름</h2>
+
+        <div class="tab-buttons">
+            <button onclick="showTab(3, 1)" class="active">소개</button>
+            <button onclick="showTab(3, 2)">시설</button>
+            <button onclick="showTab(3, 3)">이용안내</button>
+        </div>
+
+        <div id="stay3-tab1" class="tab-content active">
+            <p>숙소 3 소개</p>
+        </div>
+
+        <div id="stay3-tab2" class="tab-content">
+            <p>시설 목록</p>
+        </div>
+
+        <div id="stay3-tab3" class="tab-content">
+            <p>이용 규칙</p>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // ===== 숙소 전환 =====
+    function showStay(num) {
+        document.querySelectorAll('.stay').forEach(stay => {
+            stay.classList.remove('active');
+            stay.style.display = 'none';
+        });
+
+        const target = document.getElementById('stay' + num);
+        target.style.display = 'block';
+
+        // 애니메이션 재적용
+        setTimeout(() => {
+            target.classList.add('active');
+        }, 10);
+    }
+
+    // ===== 숙소 내부 탭 전환 =====
+    function showTab(stayNum, tabNum) {
+        // 탭 내용
+        document.querySelectorAll(`#stay${stayNum} .tab-content`).forEach(tab => {
+            tab.classList.remove('active');
+        });
+
+        document.getElementById(`stay${stayNum}-tab${tabNum}`).classList.add('active');
+
+        // 탭 버튼
+        document.querySelectorAll(`#stay${stayNum} .tab-buttons button`).forEach(btn => {
+            btn.classList.remove('active');
+        });
+
+        event.target.classList.add('active');
+    }
+</script>
+
+</body>
+</html>
