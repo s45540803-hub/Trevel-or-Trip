@@ -1,248 +1,182 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <title>숙소 소개</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>숙소 안내</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style>
-        body {
-            margin: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-            background: linear-gradient(180deg, #f7f7f7, #ececec);
-            color: #333;
-        }
+<style>
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    background: #f2f2f2;
+    overflow-x: hidden;
+}
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 24px 16px 60px;
-        }
+/* ===== 화면 ===== */
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 100vh;
+    background: #f2f2f2;
+    transition: transform 0.35s ease;
+}
 
-        h1 {
-            text-align: center;
-            margin-bottom: 24px;
-        }
+/* 첫 화면 */
+#home {
+    padding: 40px 20px;
+}
 
-        /* ===== 숙소 선택 버튼 ===== */
-        .button-group {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 24px;
-        }
+/* 상세 화면 */
+#detail {
+    transform: translateX(100%);
+    background: #fff;
+}
 
-        .button-group button {
-            padding: 16px;
-            font-size: 16px;
-            border-radius: 14px;
-            border: none;
-            background: #222;
-            color: #fff;
-            cursor: pointer;
-        }
+/* ===== 헤더 ===== */
+.header {
+    position: sticky;
+    top: 0;
+    background: #fff;
+    padding: 14px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 
-        /* ===== 숙소 카드 ===== */
-        .stay {
-            display: none;
-            background: #fff;
-            border-radius: 18px;
-            padding: 22px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+.back {
+    border: none;
+    background: none;
+    font-size: 16px;
+    cursor: pointer;
+}
 
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.4s ease;
-        }
+/* ===== 버튼 ===== */
+.btn {
+    display: block;
+    margin: 12px 0;
+    padding: 18px;
+    border-radius: 14px;
+    background: #222;
+    color: #fff;
+    text-align: center;
+    font-size: 16px;
+}
 
-        .stay.active {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
-        }
+/* ===== 카드 ===== */
+.card {
+    padding: 20px;
+}
 
-        /* ===== 내부 탭 ===== */
-        .tab-buttons {
-            display: flex;
-            gap: 8px;
-            margin: 18px 0;
-        }
+.photos {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
 
-        .tab-buttons button {
-            flex: 1;
-            padding: 10px 0;
-            border-radius: 10px;
-            border: none;
-            background: #eee;
-            font-size: 14px;
-        }
-
-        .tab-buttons button.active {
-            background: #222;
-            color: #fff;
-        }
-
-        .tab-content {
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        /* ===== 사진 영역 ===== */
-        .photo-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-        }
-
-        .photo-grid img {
-            width: 100%;
-            border-radius: 12px;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @media (min-width: 768px) {
-            .button-group {
-                flex-direction: row;
-                justify-content: center;
-            }
-
-            .photo-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-    </style>
+.photos img {
+    width: 100%;
+    border-radius: 12px;
+}
+</style>
 </head>
 <body>
 
-<div class="container">
-
+<!-- ================= 홈 ================= -->
+<div id="home" class="screen">
     <h1>🏨 숙소 선택</h1>
+    <div class="btn" onclick="openStay(1)">숙소 1</div>
+    <div class="btn" onclick="openStay(2)">숙소 2</div>
+    <div class="btn" onclick="openStay(3)">숙소 3</div>
+</div>
 
-    <!-- ===== 숙소 선택 버튼 ===== -->
-    <div class="button-group">
-        <button onclick="showStay(1)">숙소 1</button>
-        <button onclick="showStay(2)">숙소 2</button>
-        <button onclick="showStay(3)">숙소 3</button>
+<!-- ================= 상세 ================= -->
+<div id="detail" class="screen">
+    <div class="header">
+        <button class="back" onclick="goBack()">←</button>
+        <strong id="title">숙소</strong>
     </div>
 
-    <!-- ================= 숙소 1 ================= -->
-    <div id="stay1" class="stay">
-        <!-- ✏️ 숙소 이름 -->
-        <h2>🌿 숙소 1 이름</h2>
-
-        <div class="tab-buttons">
-            <button class="active" onclick="showTab(1,1)">소개</button>
-            <button onclick="showTab(1,2)">사진</button>
-            <button onclick="showTab(1,3)">안내</button>
-        </div>
-
-        <!-- ✏️ 소개 -->
-        <div id="stay1-tab1" class="tab-content active">
-            <p>숙소 1에 대한 소개 문구를 여기에 작성하세요.</p>
-        </div>
-
-        <!-- 📸 사진 (여기서 img src만 수정) -->
-        <div id="stay1-tab2" class="tab-content">
-            <div class="photo-grid">
-                <!-- ✏️ 이미지 경로 수정 -->
-                <img src="images/stay1_1.jpg" alt="숙소1 사진1">
-                <img src="images/stay1_2.jpg" alt="숙소1 사진2">
-                <img src="images/stay1_3.jpg" alt="숙소1 사진3">
-            </div>
-        </div>
-
-        <!-- ✏️ 이용 안내 -->
-        <div id="stay1-tab3" class="tab-content">
-            <p>체크인 15:00 / 체크아웃 11:00</p>
-        </div>
-    </div>
-
-    <!-- ================= 숙소 2 ================= -->
-    <div id="stay2" class="stay">
-        <h2>🏡 숙소 2 이름</h2>
-
-        <div class="tab-buttons">
-            <button class="active" onclick="showTab(2,1)">소개</button>
-            <button onclick="showTab(2,2)">사진</button>
-            <button onclick="showTab(2,3)">안내</button>
-        </div>
-
-        <div id="stay2-tab1" class="tab-content active">
-            <p>숙소 2 소개</p>
-        </div>
-
-        <div id="stay2-tab2" class="tab-content">
-            <div class="photo-grid">
-                <!-- ✏️ 이미지 경로 수정 -->
-                <img src="images/stay2_1.jpg" alt="">
-                <img src="images/stay2_2.jpg" alt="">
-            </div>
-        </div>
-
-        <div id="stay2-tab3" class="tab-content">
-            <p>이용 규칙</p>
-        </div>
-    </div>
-
-    <!-- ================= 숙소 3 ================= -->
-    <div id="stay3" class="stay">
-        <h2>✨ 숙소 3 이름</h2>
-
-        <div class="tab-buttons">
-            <button class="active" onclick="showTab(3,1)">소개</button>
-            <button onclick="showTab(3,2)">사진</button>
-            <button onclick="showTab(3,3)">안내</button>
-        </div>
-
-        <div id="stay3-tab1" class="tab-content active">
-            <p>숙소 3 소개</p>
-        </div>
-
-        <div id="stay3-tab2" class="tab-content">
-            <div class="photo-grid">
-                <!-- ✏️ 이미지 경로 수정 -->
-                <img src="images/stay3_1.jpg" alt="">
-                <img src="images/stay3_2.jpg" alt="">
-            </div>
-        </div>
-
-        <div id="stay3-tab3" class="tab-content">
-            <p>안내 사항</p>
-        </div>
-    </div>
-
+    <div class="card" id="content"></div>
 </div>
 
 <script>
-    function showStay(num) {
-        document.querySelectorAll('.stay').forEach(s => {
-            s.classList.remove('active');
-            s.style.display = 'none';
-        });
+const home = document.getElementById("home");
+const detail = document.getElementById("detail");
+const title = document.getElementById("title");
+const content = document.getElementById("content");
 
-        const target = document.getElementById('stay' + num);
-        target.style.display = 'block';
-        setTimeout(() => target.classList.add('active'), 10);
+/* ===== 숙소 데이터 (여기만 편집) ===== */
+const stays = {
+    1: {
+        name: "🌿 숙소 1",
+        html: `
+            <p>숙소 1 상세 설명</p>
+            <div class="photos">
+                <img src="https://github.com/s45540803-hub/Trevel-or-Trip/issues/2#issue-3865663866">
+                <img src="images/stay1_2.jpg">
+            </div>
+        `
+    },
+    2: {
+        name: "🏡 숙소 2",
+        html: `
+            <p>숙소 2 상세 설명</p>
+            <div class="photos">
+                <img src="images/stay2_1.jpg">
+            </div>
+        `
+    },
+    3: {
+        name: "✨ 숙소 3",
+        html: `
+            <p>숙소 3 상세 설명</p>
+            <div class="photos">
+                <img src="images/stay3_1.jpg">
+            </div>
+        `
     }
+};
 
-    function showTab(stay, tab) {
-        document.querySelectorAll(`#stay${stay} .tab-content`)
-            .forEach(t => t.classList.remove('active'));
+/* ===== 열기 ===== */
+function openStay(id, push = true) {
+    const stay = stays[id];
+    if (!stay) return;
 
-        document.querySelectorAll(`#stay${stay} .tab-buttons button`)
-            .forEach(b => b.classList.remove('active'));
+    title.innerText = stay.name;
+    content.innerHTML = stay.html;
 
-        document.getElementById(`stay${stay}-tab${tab}`).classList.add('active');
-        event.target.classList.add('active');
+    home.style.transform = "translateX(-100%)";
+    detail.style.transform = "translateX(0)";
+
+    if (push) {
+        history.pushState({ stay: id }, "", `?stay=${id}`);
     }
+}
+
+/* ===== 뒤로 ===== */
+function goBack() {
+    history.back();
+}
+
+/* ===== 브라우저 뒤로 가기 대응 ===== */
+window.addEventListener("popstate", e => {
+    if (e.state && e.state.stay) {
+        openStay(e.state.stay, false);
+    } else {
+        home.style.transform = "translateX(0)";
+        detail.style.transform = "translateX(100%)";
+    }
+});
+
+/* ===== URL 직접 접속 대응 ===== */
+const params = new URLSearchParams(location.search);
+if (params.get("stay")) {
+    openStay(params.get("stay"), false);
+}
 </script>
 
 </body>
